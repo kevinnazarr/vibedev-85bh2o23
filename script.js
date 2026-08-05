@@ -7,10 +7,10 @@ const $$ = (s) => [...document.querySelectorAll(s)];
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 const fmtDate = (iso) => { const [y, m, d] = iso.split('-').map(Number); return `${d} ${MONTHS[m - 1]} ${y}`; };
 
-/* ---------- toasts ---------- */
+/* ---------- toast ---------- */
 const ICONS = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
 const toasts = { area: null, queue: [], showing: 0, MAX: 3, DURATION: 3000 };
 
@@ -34,7 +34,7 @@ function pumpToasts() {
     const close = document.createElement('button');
     close.type = 'button';
     close.className = 'toast-close';
-    close.setAttribute('aria-label', 'Dismiss');
+    close.setAttribute('aria-label', 'Tutup');
     close.textContent = '×';
     toast.append(icon, msg, close);
     (toasts.area ||= document.querySelector('#toastArea')).appendChild(toast);
@@ -62,14 +62,14 @@ const load = () => {
     const v = JSON.parse(localStorage.getItem(KEY));
     return Array.isArray(v) ? v.filter((e) => e && e.name && e.date && typeof e.rating === 'number' && e.rating >= 1 && e.rating <= 5) : [];
   }
-  catch { showNotification('Could not read saved entries — starting fresh', 'warning'); return []; }
+  catch { showNotification('Gagal membaca catatan tersimpan — memulai dari awal', 'warning'); return []; }
 };
 let entries = load();
 let rating = 0;
 let editingId = null;
 const save = () => {
   try { localStorage.setItem(KEY, JSON.stringify(entries)); }
-  catch { showNotification('Could not save changes — storage is unavailable', 'error'); }
+  catch { showNotification('Gagal menyimpan — penyimpanan browser tidak tersedia', 'error'); }
 };
 const sorted = () => [...entries].sort((a, b) => b.date.localeCompare(a.date) || (b.created || 0) - (a.created || 0));
 
@@ -80,13 +80,13 @@ function card(e) {
   <article class="card" data-id="${e.id}">
     <div class="card-top">
       <div class="card-title"><h3>${esc(e.name)}</h3>${e.variety ? `<span class="chip">${esc(e.variety)}</span>` : ''}</div>
-      <span class="card-rating" aria-label="${e.rating} of 5 stars">${stars}</span>
+      <span class="card-rating" aria-label="${e.rating} dari 5 bintang">${stars}</span>
     </div>
-    <p class="meta">${esc(e.brew)} · ${fmtDate(e.date)}</p>
+    <p class="meta">${e.roaster ? `${esc(e.roaster)} · ` : ''}${esc(e.brew)} · ${fmtDate(e.date)}</p>
     ${e.notes ? `<p class="notes">${esc(e.notes)}</p>` : ''}
     <div class="card-actions">
-      <button class="btn btn-ghost btn-sm" data-action="edit">Edit</button>
-      <button class="btn btn-ghost btn-sm btn-danger" data-action="delete">Delete</button>
+      <button class="btn btn-ghost btn-sm" data-action="edit">Ubah</button>
+      <button class="btn btn-ghost btn-sm btn-danger" data-action="delete">Hapus</button>
     </div>
   </article>`;
 }
@@ -113,12 +113,11 @@ function paintStars(n = rating) {
 }
 
 function render() {
-  disarmDelete();
   const list = sorted();
-  $('#entryCount').textContent = list.length ? `${list.length} ${list.length === 1 ? 'entry' : 'entries'}` : '';
+  $('#entryCount').textContent = list.length ? `${list.length} catatan` : '';
   $('#entryList').innerHTML = list.length
     ? list.map(card).join('')
-    : `<div class="empty"><span class="cup">☕</span><p>No tastings logged yet.<br>Brew something &amp; add your first entry.</p></div>`;
+    : `<div class="empty"><span class="cup">☕</span><p>Belum ada catatan.<br>Coba seduh sesuatu dan tambahkan catatan pertamamu.</p></div>`;
   renderStats();
   paintStars();
 }
@@ -128,7 +127,7 @@ const form = $('#entryForm');
 
 function flag(el) {
   el.classList.remove('flag');
-  void el.offsetWidth; /* restart animation */
+  void el.offsetWidth;
   el.classList.add('flag');
   if (el.focus) el.focus();
 }
@@ -138,25 +137,25 @@ function resetForm() {
   rating = 0;
   form.reset();
   $('#date').value = today();
-  $('#formTitle').textContent = 'New tasting';
-  $('#submitBtn').textContent = 'Save tasting';
+  $('#formTitle').textContent = 'Catatan baru';
+  $('#submitBtn').textContent = 'Simpan catatan';
   $('#cancelBtn').hidden = true;
   paintStars();
 }
 
 function editEntry(id) {
-  disarmDelete();
   const e = entries.find((x) => x.id === id);
   if (!e) return;
   editingId = id;
   rating = e.rating;
   $('#name').value = e.name;
+  $('#roaster').value = e.roaster || '';
   $('#variety').value = e.variety || '';
   $('#brew').value = e.brew;
   $('#date').value = e.date;
   $('#notes').value = e.notes;
-  $('#formTitle').textContent = 'Edit tasting';
-  $('#submitBtn').textContent = 'Update entry';
+  $('#formTitle').textContent = 'Edit catatan';
+  $('#submitBtn').textContent = 'Perbarui catatan';
   $('#cancelBtn').hidden = false;
   paintStars();
   $('#formPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -166,14 +165,15 @@ function editEntry(id) {
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const name = $('#name').value.trim();
+  const roaster = $('#roaster').value.trim();
   const variety = $('#variety').value;
   const brew = $('#brew').value;
   const date = $('#date').value;
   const notes = $('#notes').value.trim();
-  if (!name) { flag($('#name')); return showNotification('Please enter a coffee name', 'warning'); }
-  if (!date) { flag($('#date')); return showNotification('Please pick a date', 'warning'); }
-  if (!rating) { flag($('#stars')); return showNotification('Please select a rating', 'warning'); }
-  const data = { name, variety, brew, date, notes, rating };
+  if (!name) { flag($('#name')); return showNotification('Isi nama kopi dulu', 'warning'); }
+  if (!date) { flag($('#date')); return showNotification('Pilih tanggal dulu', 'warning'); }
+  if (!rating) { flag($('#stars')); return showNotification('Pilih rating dulu', 'warning'); }
+  const data = { name, roaster, variety, brew, date, notes, rating };
   const wasEdit = !!editingId;
   if (wasEdit) {
     const i = entries.findIndex((x) => x.id === editingId);
@@ -184,13 +184,13 @@ form.addEventListener('submit', (e) => {
   save();
   resetForm();
   render();
-  showNotification(wasEdit ? 'Coffee updated' : 'Coffee added to your journal', 'success');
+  showNotification(wasEdit ? 'Catatan kopi diperbarui' : 'Catatan kopi ditambahkan', 'success');
 });
 
 form.addEventListener('input', (e) => e.target.classList.remove('flag'));
 $('#cancelBtn').addEventListener('click', resetForm);
 
-/* ---------- interactions ---------- */
+/* ---------- stars ---------- */
 $('#stars').addEventListener('click', (e) => {
   const b = e.target.closest('.star');
   if (!b) return;
@@ -204,46 +204,57 @@ $('#stars').addEventListener('mouseover', (e) => {
 });
 $('#stars').addEventListener('mouseleave', () => paintStars());
 
-let pendingId = null;
-let pendingBtn = null;
-let pendingTimer = null;
+/* ---------- modal hapus ---------- */
+const modal = $('#deleteModal');
+let deleteId = null;
+let deleteTrigger = null;
 
-function armDelete(id, btn) {
-  disarmDelete();
-  pendingId = id;
-  pendingBtn = btn;
-  btn.textContent = 'Confirm?';
-  btn.classList.add('armed');
-  pendingTimer = setTimeout(disarmDelete, 3000);
+function openDeleteModal(id, trigger) {
+  deleteId = id;
+  deleteTrigger = trigger;
+  modal.classList.add('open');
+  $('#confirmDelete').focus();
 }
 
-function disarmDelete() {
-  clearTimeout(pendingTimer);
-  if (pendingBtn) { pendingBtn.textContent = 'Delete'; pendingBtn.classList.remove('armed'); }
-  pendingBtn = null;
-  pendingId = null;
+function closeDeleteModal() {
+  modal.classList.remove('open');
+  deleteId = null;
+  if (deleteTrigger) deleteTrigger.focus();
+  deleteTrigger = null;
 }
 
-$('#toastArea').addEventListener('click', (e) => {
-  const btn = e.target.closest('.toast-close');
-  if (btn) dismissToast(btn.closest('.toast'));
+function confirmDelete() {
+  if (!deleteId) return;
+  const id = deleteId;
+  closeDeleteModal();
+  entries = entries.filter((x) => x.id !== id);
+  if (editingId === id) resetForm();
+  save();
+  render();
+  showNotification('Catatan kopi dihapus', 'success');
+}
+
+modal.addEventListener('click', (e) => {
+  if (e.target.closest('[data-close]')) closeDeleteModal();
+});
+$('#confirmDelete').addEventListener('click', confirmDelete);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('open')) closeDeleteModal();
 });
 
+/* ---------- list ---------- */
 $('#entryList').addEventListener('click', (e) => {
   const b = e.target.closest('button[data-action]');
   if (!b) return;
   const id = b.closest('.card').dataset.id;
   if (b.dataset.action === 'edit') return editEntry(id);
-  if (pendingId === id) {
-    disarmDelete();
-    entries = entries.filter((x) => x.id !== id);
-    if (editingId === id) resetForm();
-    save();
-    render();
-    showNotification('Coffee deleted', 'success');
-  } else {
-    armDelete(id, b);
-  }
+  openDeleteModal(id, b);
+});
+
+/* ---------- toast area ---------- */
+$('#toastArea').addEventListener('click', (e) => {
+  const btn = e.target.closest('.toast-close');
+  if (btn) dismissToast(btn.closest('.toast'));
 });
 
 /* ---------- init ---------- */

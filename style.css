@@ -99,8 +99,8 @@ textarea{resize:vertical;min-height:78px}
 .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--brown)}
 .btn-ghost:hover{border-color:var(--caramel);background:#f7edda}
 .btn-danger:hover{border-color:var(--danger);color:var(--danger);background:#fcf0ec}
-.card .armed{background:var(--danger);border-color:var(--danger);color:#fff}
-.card .armed:hover{background:#a9442f;border-color:#a9442f;color:#fff}
+.btn-solid-danger{background:var(--danger);color:#fff}
+.btn-solid-danger:hover{background:#a9442f}
 .btn-sm{padding:7px 12px;border-radius:10px;font-size:.85rem}
 .btn:focus-visible,.star:focus-visible{outline:2px solid var(--caramel);outline-offset:2px}
 .form-actions{display:flex;gap:10px;margin-top:20px}
@@ -148,6 +148,17 @@ textarea{resize:vertical;min-height:78px}
 .toast-close:hover{color:var(--espresso);background:#efe2ca}
 @keyframes toastIn{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
 @keyframes toastOut{to{opacity:0;transform:translateX(26px)}}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:200;display:none;place-items:center;padding:16px}
+.modal.open{display:grid}
+.modal-backdrop{position:absolute;inset:0;background:rgba(30,16,6,.55);animation:fadeIn .2s ease}
+.modal-card{position:relative;width:min(360px,100%);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 24px 60px rgba(30,16,6,.35);padding:24px 22px;animation:pop .25s ease}
+.modal-card h3{font-family:var(--serif);font-size:1.2rem;margin:0 0 8px;color:var(--espresso)}
+.modal-card p{margin:0;font-size:.92rem;line-height:1.55;color:var(--tan)}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:none}}
 
 /* ---------- misc ---------- */
 .empty{

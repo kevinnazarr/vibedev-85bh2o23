@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Caffeine Diary — a warm, local-first coffee tasting journal. Log brews, rate them, and track your favorites.">
-<title>Caffeine Diary · Coffee Tasting Log</title>
+<meta name="description" content="Caffeine Diary — jurnal pengecap kopi pribadi yang tersimpan di browser. Catat seduhan, beri rating, dan temukan favoritmu.">
+<title>Caffeine Diary · Catatan Kopi</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,48 +20,51 @@
     </span>
     <div>
       <h1>Caffeine Diary</h1>
-      <p>A warm place to log every brew you taste</p>
+      <p>Tempat hangat untuk mencatat setiap seduhan yang kamu cicipi</p>
     </div>
   </div>
 </header>
 
-<section class="stats" aria-label="Coffee statistics">
+<section class="stats" aria-label="Statistik kopi">
   <div class="stat">
     <span class="stat-value" id="statTotal">0</span>
-    <span class="stat-label">Coffees logged</span>
+    <span class="stat-label">Kopi dicatat</span>
   </div>
   <div class="stat">
     <span class="stat-value" id="statAvg">—</span>
-    <span class="stat-label">Average rating</span>
+    <span class="stat-label">Rata-rata rating</span>
   </div>
   <div class="stat">
     <span class="stat-value stat-name" id="statBest">—</span>
-    <span class="stat-label">Best rated</span>
+    <span class="stat-label">Rating tertinggi</span>
     <span class="stat-sub" id="statBestSub"></span>
   </div>
 </section>
 
 <main class="layout">
   <section class="panel form-panel" id="formPanel">
-    <h2 id="formTitle">New tasting</h2>
+    <h2 id="formTitle">Catatan baru</h2>
     <form id="entryForm" novalidate>
-      <label for="name">Coffee name</label>
-      <input type="text" id="name" maxlength="60" placeholder="e.g. Ethiopia Yirgacheffe" autocomplete="off">
+      <label for="name">Nama kopi</label>
+      <input type="text" id="name" maxlength="60" placeholder="cth. Gayo Aceh" autocomplete="off">
 
-      <label for="variety">Coffee variety</label>
+      <label for="roaster">Roaster / Kafe</label>
+      <input type="text" id="roaster" maxlength="60" placeholder="cth. Anomali Coffee, Kopi Kenangan…" autocomplete="off">
+
+      <label for="variety">Varietas kopi</label>
       <select id="variety">
-        <option value="">Choose variety</option>
-        <option>Arabica</option>
+        <option value="">Pilih varietas</option>
+        <option>Arabika</option>
         <option>Robusta</option>
-        <option>Liberica</option>
-        <option>Excelsa</option>
+        <option>Liberika</option>
+        <option>Ekselsa</option>
         <option>Blend</option>
-        <option>Other</option>
+        <option>Lainnya</option>
       </select>
 
       <div class="field-row">
         <div>
-          <label for="brew">Brew method</label>
+          <label for="brew">Metode seduh</label>
           <select id="brew">
             <option>Espresso</option>
             <option>Pour Over</option>
@@ -70,44 +73,56 @@
             <option>Moka Pot</option>
             <option>Cold Brew</option>
             <option>Drip</option>
-            <option>Other</option>
+            <option>Lainnya</option>
           </select>
         </div>
         <div>
-          <label for="date">Date</label>
+          <label for="date">Tanggal</label>
           <input type="date" id="date">
         </div>
       </div>
 
       <label>Rating</label>
       <div class="stars" id="stars" role="radiogroup" aria-label="Rating" tabindex="-1">
-        <button type="button" class="star" data-v="1" role="radio" aria-checked="false" aria-label="1 star">★</button>
-        <button type="button" class="star" data-v="2" role="radio" aria-checked="false" aria-label="2 stars">★</button>
-        <button type="button" class="star" data-v="3" role="radio" aria-checked="false" aria-label="3 stars">★</button>
-        <button type="button" class="star" data-v="4" role="radio" aria-checked="false" aria-label="4 stars">★</button>
-        <button type="button" class="star" data-v="5" role="radio" aria-checked="false" aria-label="5 stars">★</button>
+        <button type="button" class="star" data-v="1" role="radio" aria-checked="false" aria-label="1 bintang">★</button>
+        <button type="button" class="star" data-v="2" role="radio" aria-checked="false" aria-label="2 bintang">★</button>
+        <button type="button" class="star" data-v="3" role="radio" aria-checked="false" aria-label="3 bintang">★</button>
+        <button type="button" class="star" data-v="4" role="radio" aria-checked="false" aria-label="4 bintang">★</button>
+        <button type="button" class="star" data-v="5" role="radio" aria-checked="false" aria-label="5 bintang">★</button>
       </div>
 
-      <label for="notes">Tasting notes</label>
-      <textarea id="notes" rows="3" maxlength="300" placeholder="Aroma, acidity, body, sweetness, finish…"></textarea>
+      <label for="notes">Catatan rasa</label>
+      <textarea id="notes" rows="3" maxlength="300" placeholder="Aroma, keasaman, body, manis, aftertaste…"></textarea>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary" id="submitBtn">Save tasting</button>
-        <button type="button" class="btn btn-ghost" id="cancelBtn" hidden>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Simpan catatan</button>
+        <button type="button" class="btn btn-ghost" id="cancelBtn" hidden>Batal</button>
       </div>
     </form>
   </section>
 
   <section class="panel list-panel">
     <div class="list-head">
-      <h2>Journal</h2>
+      <h2>Jurnal</h2>
       <span class="count" id="entryCount" aria-live="polite"></span>
     </div>
     <div class="list" id="entryList"></div>
   </section>
 </main>
 
-<footer class="footer">Logged locally in your browser — your brews never leave this device ☕</footer>
+<footer class="footer">Tersimpan lokal di browser — catatanmu tidak pernah meninggalkan perangkat ini ☕</footer>
+
+<div class="modal" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <h3 id="modalTitle">Hapus catatan ini?</h3>
+    <p id="modalMsg">Catatan kopi ini akan dihapus permanen dan tidak bisa dikembalikan.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close>Batal</button>
+      <button type="button" class="btn btn-solid-danger" id="confirmDelete">Hapus</button>
+    </div>
+  </div>
+</div>
 
 <div class="toasts" id="toastArea" aria-live="polite"></div>
 
