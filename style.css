@@ -1,145 +1,103 @@
-*,*::before,*::after{box-sizing:border-box}
-:root{
-  --bg:#f2e8d4;
-  --surface:#fffaf0;
-  --card:#fffdf6;
-  --espresso:#2b1a0e;
-  --brown:#51341d;
-  --tan:#8d7154;
-  --caramel:#c88a3d;
-  --amber:#d9a05b;
-  --cream:#f7edda;
-  --line:#e6d5b8;
-  --danger:#c0553d;
-  --radius:18px;
-  --shadow:0 12px 30px rgba(70,40,14,.10);
-  --serif:Georgia,'Times New Roman',serif;
-  --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-}
-html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;font-family:var(--sans);color:#3a2413;line-height:1.5;
-  background:var(--bg);
-  background-image:radial-gradient(1100px 480px at 90% -12%,rgba(200,138,61,.14),transparent 60%),radial-gradient(800px 420px at -8% 8%,rgba(81,52,29,.08),transparent 55%);
-  min-height:100vh;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Caffeine Diary — a warm, local-first coffee tasting journal. Log brews, rate them, and track your favorites.">
+<title>Caffeine Diary · Coffee Tasting Log</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-/* ---------- header ---------- */
-.header{
-  background:linear-gradient(165deg,#38220f,#241407 70%);
-  color:var(--cream);padding:32px 0 72px;
-  border-bottom:1px solid rgba(247,237,218,.08);
-}
-.brand{max-width:1150px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:16px}
-.brand-mark{
-  flex:0 0 auto;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
-  color:#26160a;background:linear-gradient(150deg,var(--amber),var(--caramel));
-  box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),0 6px 16px rgba(0,0,0,.28);
-}
-.brand h1{margin:0;font-family:var(--serif);font-size:1.75rem;font-weight:700;color:#fff7ea}
-.brand p{margin:3px 0 0;font-size:.86rem;color:#d9b88a}
+<header class="header">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 9h13v5.5A4.5 4.5 0 0 1 12.5 19H8.5A4.5 4.5 0 0 1 4 14.5V9z"/>
+        <path d="M17 10.5h1.2a2.3 2.3 0 0 1 0 4.6H17"/>
+        <path d="M7.5 5.2c0-1 1.3-1 1.3-2M11.5 5.2c0-1 1.3-1 1.3-2"/>
+      </svg>
+    </span>
+    <div>
+      <h1>Caffeine Diary</h1>
+      <p>A warm place to log every brew you taste</p>
+    </div>
+  </div>
+</header>
 
-/* ---------- stats ---------- */
-.stats{
-  max-width:1150px;margin:-42px auto 0;padding:0 18px;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
-}
-.stat{
-  background:var(--surface);border:1px solid var(--line);border-radius:16px;
-  padding:16px 10px 14px;text-align:center;box-shadow:var(--shadow);
-  min-width:0;
-}
-.stat-value{display:block;font-family:var(--serif);font-size:1.65rem;font-weight:700;color:var(--espresso);line-height:1.1}
-.stat-name{font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.stat-label{display:block;margin-top:5px;font-size:.66rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--tan)}
-.stat-sub{display:block;margin-top:3px;font-size:.8rem;font-weight:700;color:var(--caramel)}
+<section class="stats" aria-label="Coffee statistics">
+  <div class="stat">
+    <span class="stat-value" id="statTotal">0</span>
+    <span class="stat-label">Coffees logged</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="statAvg">—</span>
+    <span class="stat-label">Average rating</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value stat-name" id="statBest">—</span>
+    <span class="stat-label">Best rated</span>
+    <span class="stat-sub" id="statBestSub"></span>
+  </div>
+</section>
 
-/* ---------- layout ---------- */
-.layout{max-width:1150px;margin:26px auto 0;padding:0 18px;display:grid;gap:20px;align-items:start}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 18px}
-.panel h2{font-family:var(--serif);font-size:1.3rem;margin:0;color:var(--espresso)}
-@media(min-width:900px){
-  .layout{grid-template-columns:360px 1fr;margin-top:30px}
-  .form-panel{position:sticky;top:18px}
-}
+<main class="layout">
+  <section class="panel form-panel" id="formPanel">
+    <h2 id="formTitle">New tasting</h2>
+    <form id="entryForm" novalidate>
+      <label for="name">Coffee name</label>
+      <input type="text" id="name" maxlength="60" placeholder="e.g. Ethiopia Yirgacheffe" autocomplete="off">
 
-/* ---------- form ---------- */
-label{display:block;margin:16px 0 6px;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tan)}
-input[type=text],input[type=date],select,textarea{
-  width:100%;font:inherit;color:#3a2413;background:var(--card);
-  border:1px solid var(--line);border-radius:12px;padding:11px 13px;
-  transition:border-color .2s,box-shadow .2s;
-}
-select{
-  appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238d7154' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;
-}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--caramel);box-shadow:0 0 0 3px rgba(200,138,61,.2)}
-textarea{resize:vertical;min-height:78px}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.field-row label{margin-top:16px}
-.stars{display:flex;gap:2px;margin:2px 0 4px}
-.star{
-  background:none;border:0;padding:4px;cursor:pointer;
-  font-size:1.85rem;line-height:1;color:#d8c3a0;
-  transition:color .15s,transform .15s;
-}
-.star:hover{transform:scale(1.18) rotate(-4deg)}
-.star.on{color:var(--amber);text-shadow:0 2px 10px rgba(217,160,91,.5)}
+      <div class="field-row">
+        <div>
+          <label for="brew">Brew method</label>
+          <select id="brew">
+            <option>Espresso</option>
+            <option>Pour Over</option>
+            <option>French Press</option>
+            <option>AeroPress</option>
+            <option>Moka Pot</option>
+            <option>Cold Brew</option>
+            <option>Drip</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+      </div>
 
-/* ---------- buttons ---------- */
-.btn{
-  font:inherit;font-weight:600;border:0;border-radius:12px;
-  padding:12px 18px;cursor:pointer;color:inherit;
-  transition:transform .15s,box-shadow .2s,background .2s,border-color .2s,color .2s;
-}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--espresso);color:var(--cream);box-shadow:0 8px 18px rgba(43,26,14,.28)}
-.btn-primary:hover{background:#3b2411;box-shadow:0 10px 22px rgba(43,26,14,.32);transform:translateY(-1px)}
-.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--brown)}
-.btn-ghost:hover{border-color:var(--caramel);background:#f7edda}
-.btn-danger:hover{border-color:var(--danger);color:var(--danger);background:#fcf0ec}
-.btn-sm{padding:7px 12px;border-radius:10px;font-size:.85rem}
-.btn:focus-visible,.star:focus-visible{outline:2px solid var(--caramel);outline-offset:2px}
-.form-actions{display:flex;gap:10px;margin-top:20px}
-.form-actions .btn-primary{flex:1}
+      <label>Rating</label>
+      <div class="stars" id="stars" aria-label="Rating">
+        <button type="button" class="star" data-v="1" aria-label="1 star">★</button>
+        <button type="button" class="star" data-v="2" aria-label="2 stars">★</button>
+        <button type="button" class="star" data-v="3" aria-label="3 stars">★</button>
+        <button type="button" class="star" data-v="4" aria-label="4 stars">★</button>
+        <button type="button" class="star" data-v="5" aria-label="5 stars">★</button>
+      </div>
 
-/* ---------- journal list ---------- */
-.list-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.count{font-size:.82rem;color:var(--tan);font-weight:600}
-.list{
-  display:flex;flex-direction:column;gap:14px;
-  margin-top:16px;max-height:58vh;overflow-y:auto;
-  padding:2px 6px 2px 2px;
-}
-@media(min-width:900px){.list{max-height:calc(100vh - 260px)}}
-.list::-webkit-scrollbar{width:8px}
-.list::-webkit-scrollbar-thumb{background:#dcc7a3;border-radius:8px;border:2px solid var(--surface)}
+      <label for="notes">Tasting notes</label>
+      <textarea id="notes" rows="3" maxlength="300" placeholder="Aroma, acidity, body, sweetness, finish…"></textarea>
 
-/* ---------- cards ---------- */
-.card{
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:16px;animation:rise .35s ease both;
-  transition:transform .2s,box-shadow .2s,border-color .2s;
-}
-.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#dbb98b}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.card h3{font-family:var(--serif);font-size:1.08rem;margin:0;color:var(--espresso)}
-.card-rating{color:var(--amber);font-size:.95rem;letter-spacing:1px;white-space:nowrap;padding-top:2px}
-.meta{margin:5px 0 0;font-size:.8rem;color:var(--tan);font-weight:500}
-.notes{margin:10px 0 0;font-size:.92rem;line-height:1.6;color:#57432f;white-space:pre-wrap}
-.card-actions{display:flex;gap:8px;margin-top:14px}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Save tasting</button>
+        <button type="button" class="btn btn-ghost" id="cancelBtn" hidden>Cancel</button>
+      </div>
+    </form>
+  </section>
 
-/* ---------- misc ---------- */
-.empty{
-  text-align:center;color:var(--tan);padding:44px 14px;
-  border:1.5px dashed var(--line);border-radius:16px;
-}
-.empty .cup{display:block;font-size:2.4rem;margin-bottom:10px}
-.empty p{margin:0;font-size:.92rem;line-height:1.6}
-.footer{max-width:1150px;margin:0 auto;padding:34px 18px 44px;text-align:center;font-size:.8rem;color:var(--tan)}
-.flag{border-color:var(--danger)!important;animation:shake .4s}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes shake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  <section class="panel list-panel">
+    <div class="list-head">
+      <h2>Journal</h2>
+      <span class="count" id="entryCount"></span>
+    </div>
+    <div class="list" id="entryList"></div>
+  </section>
+</main>
+
+<footer class="footer">Logged locally in your browser — your brews never leave this device ☕</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

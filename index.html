@@ -69,12 +69,12 @@
       </div>
 
       <label>Rating</label>
-      <div class="stars" id="stars" aria-label="Rating">
-        <button type="button" class="star" data-v="1" aria-label="1 star">★</button>
-        <button type="button" class="star" data-v="2" aria-label="2 stars">★</button>
-        <button type="button" class="star" data-v="3" aria-label="3 stars">★</button>
-        <button type="button" class="star" data-v="4" aria-label="4 stars">★</button>
-        <button type="button" class="star" data-v="5" aria-label="5 stars">★</button>
+      <div class="stars" id="stars" role="radiogroup" aria-label="Rating" tabindex="-1">
+        <button type="button" class="star" data-v="1" role="radio" aria-checked="false" aria-label="1 star">★</button>
+        <button type="button" class="star" data-v="2" role="radio" aria-checked="false" aria-label="2 stars">★</button>
+        <button type="button" class="star" data-v="3" role="radio" aria-checked="false" aria-label="3 stars">★</button>
+        <button type="button" class="star" data-v="4" role="radio" aria-checked="false" aria-label="4 stars">★</button>
+        <button type="button" class="star" data-v="5" role="radio" aria-checked="false" aria-label="5 stars">★</button>
       </div>
 
       <label for="notes">Tasting notes</label>
@@ -90,7 +90,7 @@
   <section class="panel list-panel">
     <div class="list-head">
       <h2>Journal</h2>
-      <span class="count" id="entryCount"></span>
+      <span class="count" id="entryCount" aria-live="polite"></span>
     </div>
     <div class="list" id="entryList"></div>
   </section>
