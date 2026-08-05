@@ -154,7 +154,7 @@ function editEntry(id) {
   $('#brew').value = e.brew;
   $('#date').value = e.date;
   $('#notes').value = e.notes;
-  $('#formTitle').textContent = 'Edit catatan';
+  $('#formTitle').textContent = 'Ubah catatan';
   $('#submitBtn').textContent = 'Perbarui catatan';
   $('#cancelBtn').hidden = false;
   paintStars();
