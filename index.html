@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Caffeine Diary — a warm, local-first coffee tasting journal. Log brews, rate them, and track your favorites.">
+<title>Caffeine Diary · Coffee Tasting Log</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 9h13v5.5A4.5 4.5 0 0 1 12.5 19H8.5A4.5 4.5 0 0 1 4 14.5V9z"/>
+        <path d="M17 10.5h1.2a2.3 2.3 0 0 1 0 4.6H17"/>
+        <path d="M7.5 5.2c0-1 1.3-1 1.3-2M11.5 5.2c0-1 1.3-1 1.3-2"/>
+      </svg>
+    </span>
+    <div>
+      <h1>Caffeine Diary</h1>
+      <p>A warm place to log every brew you taste</p>
+    </div>
+  </div>
+</header>
+
+<section class="stats" aria-label="Coffee statistics">
+  <div class="stat">
+    <span class="stat-value" id="statTotal">0</span>
+    <span class="stat-label">Coffees logged</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="statAvg">—</span>
+    <span class="stat-label">Average rating</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value stat-name" id="statBest">—</span>
+    <span class="stat-label">Best rated</span>
+    <span class="stat-sub" id="statBestSub"></span>
+  </div>
+</section>
+
+<main class="layout">
+  <section class="panel form-panel" id="formPanel">
+    <h2 id="formTitle">New tasting</h2>
+    <form id="entryForm" novalidate>
+      <label for="name">Coffee name</label>
+      <input type="text" id="name" maxlength="60" placeholder="e.g. Ethiopia Yirgacheffe" autocomplete="off">
+
+      <div class="field-row">
+        <div>
+          <label for="brew">Brew method</label>
+          <select id="brew">
+            <option>Espresso</option>
+            <option>Pour Over</option>
+            <option>French Press</option>
+            <option>AeroPress</option>
+            <option>Moka Pot</option>
+            <option>Cold Brew</option>
+            <option>Drip</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+      </div>
+
+      <label>Rating</label>
+      <div class="stars" id="stars" aria-label="Rating">
+        <button type="button" class="star" data-v="1" aria-label="1 star">★</button>
+        <button type="button" class="star" data-v="2" aria-label="2 stars">★</button>
+        <button type="button" class="star" data-v="3" aria-label="3 stars">★</button>
+        <button type="button" class="star" data-v="4" aria-label="4 stars">★</button>
+        <button type="button" class="star" data-v="5" aria-label="5 stars">★</button>
+      </div>
+
+      <label for="notes">Tasting notes</label>
+      <textarea id="notes" rows="3" maxlength="300" placeholder="Aroma, acidity, body, sweetness, finish…"></textarea>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Save tasting</button>
+        <button type="button" class="btn btn-ghost" id="cancelBtn" hidden>Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel list-panel">
+    <div class="list-head">
+      <h2>Journal</h2>
+      <span class="count" id="entryCount"></span>
+    </div>
+    <div class="list" id="entryList"></div>
+  </section>
+</main>
+
+<footer class="footer">Logged locally in your browser — your brews never leave this device ☕</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
