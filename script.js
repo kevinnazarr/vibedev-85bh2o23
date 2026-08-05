@@ -213,11 +213,13 @@ function openDeleteModal(id, trigger) {
   deleteId = id;
   deleteTrigger = trigger;
   modal.classList.add('open');
+  document.body.classList.add('no-scroll');
   $('#confirmDelete').focus();
 }
 
 function closeDeleteModal() {
   modal.classList.remove('open');
+  document.body.classList.remove('no-scroll');
   deleteId = null;
   if (deleteTrigger) deleteTrigger.focus();
   deleteTrigger = null;
@@ -236,6 +238,15 @@ function confirmDelete() {
 
 modal.addEventListener('click', (e) => {
   if (e.target.closest('[data-close]')) closeDeleteModal();
+});
+modal.addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab' || !modal.classList.contains('open')) return;
+  const focusables = [...modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')];
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 });
 $('#confirmDelete').addEventListener('click', confirmDelete);
 document.addEventListener('keydown', (e) => {
