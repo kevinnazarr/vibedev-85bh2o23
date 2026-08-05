@@ -14,7 +14,7 @@ const fmtDate = (iso) => { const [y, m, d] = iso.split('-').map(Number); return 
 const load = () => {
   try {
     const v = JSON.parse(localStorage.getItem(KEY));
-    return Array.isArray(v) ? v.filter((e) => e && e.name && e.date && e.rating >= 1 && e.rating <= 5) : [];
+    return Array.isArray(v) ? v.filter((e) => e && e.name && e.date && typeof e.rating === 'number' && e.rating >= 1 && e.rating <= 5) : [];
   }
   catch { return []; }
 };
@@ -142,7 +142,7 @@ $('#stars').addEventListener('click', (e) => {
 });
 $('#stars').addEventListener('mouseover', (e) => {
   const b = e.target.closest('.star');
-  if (b) paintStars(+b.dataset.v);
+  if (b) $$('#stars .star').forEach((s, i) => s.classList.toggle('on', i < +b.dataset.v));
 });
 $('#stars').addEventListener('mouseleave', () => paintStars());
 
