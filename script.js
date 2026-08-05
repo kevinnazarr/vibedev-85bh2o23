@@ -78,7 +78,10 @@ function card(e) {
   const stars = '★'.repeat(e.rating) + '☆'.repeat(5 - e.rating);
   return `
   <article class="card" data-id="${e.id}">
-    <div class="card-top"><h3>${esc(e.name)}</h3><span class="card-rating" aria-label="${e.rating} of 5 stars">${stars}</span></div>
+    <div class="card-top">
+      <div class="card-title"><h3>${esc(e.name)}</h3>${e.variety ? `<span class="chip">${esc(e.variety)}</span>` : ''}</div>
+      <span class="card-rating" aria-label="${e.rating} of 5 stars">${stars}</span>
+    </div>
     <p class="meta">${esc(e.brew)} · ${fmtDate(e.date)}</p>
     ${e.notes ? `<p class="notes">${esc(e.notes)}</p>` : ''}
     <div class="card-actions">
@@ -148,6 +151,7 @@ function editEntry(id) {
   editingId = id;
   rating = e.rating;
   $('#name').value = e.name;
+  $('#variety').value = e.variety || '';
   $('#brew').value = e.brew;
   $('#date').value = e.date;
   $('#notes').value = e.notes;
@@ -162,13 +166,14 @@ function editEntry(id) {
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const name = $('#name').value.trim();
+  const variety = $('#variety').value;
   const brew = $('#brew').value;
   const date = $('#date').value;
   const notes = $('#notes').value.trim();
   if (!name) { flag($('#name')); return showNotification('Please enter a coffee name', 'warning'); }
   if (!date) { flag($('#date')); return showNotification('Please pick a date', 'warning'); }
   if (!rating) { flag($('#stars')); return showNotification('Please select a rating', 'warning'); }
-  const data = { name, brew, date, notes, rating };
+  const data = { name, variety, brew, date, notes, rating };
   const wasEdit = !!editingId;
   if (wasEdit) {
     const i = entries.findIndex((x) => x.id === editingId);

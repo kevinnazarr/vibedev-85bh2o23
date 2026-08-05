@@ -126,7 +126,9 @@ textarea{resize:vertical;min-height:78px}
 }
 .card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#dbb98b}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
 .card h3{font-family:var(--serif);font-size:1.08rem;margin:0;color:var(--espresso)}
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;background:#f4e5c9;border:1px solid #e3cba0;color:#7a4f24;font-size:.72rem;font-weight:700;letter-spacing:.03em}
 .card-rating{color:var(--amber);font-size:.95rem;letter-spacing:1px;white-space:nowrap;padding-top:2px}
 .meta{margin:5px 0 0;font-size:.8rem;color:var(--tan);font-weight:500}
 .notes{margin:10px 0 0;font-size:.92rem;line-height:1.6;color:#57432f;white-space:pre-wrap}
