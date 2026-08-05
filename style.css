@@ -99,6 +99,8 @@ textarea{resize:vertical;min-height:78px}
 .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--brown)}
 .btn-ghost:hover{border-color:var(--caramel);background:#f7edda}
 .btn-danger:hover{border-color:var(--danger);color:var(--danger);background:#fcf0ec}
+.card .armed{background:var(--danger);border-color:var(--danger);color:#fff}
+.card .armed:hover{background:#a9442f;border-color:#a9442f;color:#fff}
 .btn-sm{padding:7px 12px;border-radius:10px;font-size:.85rem}
 .btn:focus-visible,.star:focus-visible{outline:2px solid var(--caramel);outline-offset:2px}
 .form-actions{display:flex;gap:10px;margin-top:20px}
@@ -129,6 +131,21 @@ textarea{resize:vertical;min-height:78px}
 .meta{margin:5px 0 0;font-size:.8rem;color:var(--tan);font-weight:500}
 .notes{margin:10px 0 0;font-size:.92rem;line-height:1.6;color:#57432f;white-space:pre-wrap}
 .card-actions{display:flex;gap:8px;margin-top:14px}
+
+/* ---------- toasts ---------- */
+.toasts{position:fixed;top:16px;right:16px;z-index:100;display:flex;flex-direction:column;gap:10px;max-width:min(340px,calc(100vw - 32px));pointer-events:none}
+.toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:11px 12px;box-shadow:var(--shadow);font-size:.88rem;color:var(--espresso);animation:toastIn .28s ease}
+.toast.hide{animation:toastOut .25s ease forwards}
+.toast--success{--accent:#3e7d4f}
+.toast--error{--accent:#c0553d}
+.toast--warning{--accent:#c88a3d}
+.toast--info{--accent:#5b7f9d}
+.toast-icon{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700;color:#fff;background:var(--accent)}
+.toast-msg{flex:1;line-height:1.45;padding-top:3px}
+.toast-close{flex:0 0 auto;background:none;border:0;cursor:pointer;color:var(--tan);font-size:1.05rem;line-height:1;padding:2px 5px;border-radius:6px;transition:color .15s,background .15s}
+.toast-close:hover{color:var(--espresso);background:#efe2ca}
+@keyframes toastIn{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(26px)}}
 
 /* ---------- misc ---------- */
 .empty{
