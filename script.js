@@ -54,6 +54,7 @@ function dismissToast(toast) {
     pumpToasts();
   }, 300);
 }
+globalThis.showNotification = showNotification;
 
 /* ---------- state ---------- */
 const load = () => {
